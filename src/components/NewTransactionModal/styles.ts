@@ -67,4 +67,4 @@ export const CloseButton = styled(Dialog.Close)`
     cursor: pointer;
     
     color: ${props => props.theme["gray-500"]};
-`;
+`
