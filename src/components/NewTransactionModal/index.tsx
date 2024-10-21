@@ -4,6 +4,7 @@ import { ArrowCircleDown, ArrowCircleUp, X } from "phosphor-react";
 import * as z from 'zod';
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { api } from "../../lib/axios";
 
 const newTransactionFormSchema = z.object({
   description: z.string(),
@@ -21,15 +22,38 @@ export function NewTransactionModal() {
     control,
     register,
     handleSubmit,
-    formState: { isSubmitting }
+    formState: { isSubmitting },
+    reset
   } = useForm<NewTransactionFormInputs>({
     resolver: zodResolver(newTransactionFormSchema),
+    defaultValues: {
+      type: 'income'
+    }
   })
 
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    const { description, price, category, type } = data;
+    
+    await api.post('transactions', {
+      description,
+      price,
+      category,
+      type,
+      createdAt: new Date(),
 
-    console.log(data);
+      /*
+      ...data
+      é o mesmo que colocar
+      
+      o ID o json server cria sozinho
+      description: data.description,
+      category: data.category,
+      price: data.price,
+      type: data.type
+      */
+    })
+
+    reset();
   }
   
   return (
