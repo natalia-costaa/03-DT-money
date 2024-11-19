@@ -5,8 +5,9 @@ import * as z from 'zod';
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 // import { api } from "../../lib/axios";
-import { useContext } from "react";
+// import { useContext } from "react";
 import { TransactionContext } from "../../contexts/TransactionContext";
+import { useContextSelector } from "use-context-selector";
 
 const newTransactionFormSchema = z.object({
   description: z.string(),
@@ -20,7 +21,9 @@ type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>;
 // vai contar a parte do modal em si
 export function NewTransactionModal() {
 
-  const { createTransaction } = useContext(TransactionContext)
+  const createTransaction = useContextSelector(TransactionContext, (context) => {
+    return context.createTransaction;
+  })
 
   const {
     control,
